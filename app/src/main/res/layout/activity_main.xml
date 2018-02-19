@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.karkun.ActivityMain">
+    tools:context="com.karkun.activities.ActivityMain">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/mbackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mToolbar" />
+
+    <include
+        android:id="@+id/mToolbar"
+        layout="@layout/toolbar" />
+
+    <com.karkun.recyclerViewAdapterAndRealmDatabase.MyRecyclerView
+        android:id="@+id/mRecyclerView"
+        android:layout_marginTop="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mToolbar" />
+
+    <include
+        android:id="@+id/empty_layout"
+        layout="@layout/empty_layout"/>
+</RelativeLayout>

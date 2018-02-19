@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/toolbar_search"
+        android:icon="@drawable/search_icon"
+        android:title="Search"
+        app:showAsAction="collapseActionView|always"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
+
+    <item
+        android:id="@+id/toolbar_add"
+        android:icon="@drawable/add_icon"
+        android:title="Add"
+        app:showAsAction="always" />
+
+    <item
+        android:icon="@drawable/quit_icon"
+        android:title="Quit"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/toolbar_info"
+                android:orderInCategory="00"
+                android:title="info"/>
+
+            <item
+                android:id="@+id/toolbar_quit"
+                android:orderInCategory="01"
+                android:title="Quit"/>
+        </menu>
+    </item>
+</menu>

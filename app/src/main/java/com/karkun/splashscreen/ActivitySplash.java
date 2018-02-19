@@ -1,11 +1,11 @@
-package com.karkun.SplashScreen;
+package com.karkun.splashscreen;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.karkun.ActivityMain;
+import com.karkun.activities.ActivityMain;
 
 /**
  * Created by Windows on 1/01/2018.
