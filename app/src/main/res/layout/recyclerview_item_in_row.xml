@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="170dp"
+    android:background="#3b5c74">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/riir_karkun_cardview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="54dp"
+        android:layout_marginEnd="266dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="266dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Image"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/riir_karkun_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/riir_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="181dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginRight="181dp"
+        android:layout_marginLeft="43dp"
+        android:layout_marginTop="16dp"
+        android:text="Name: "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_karkun_cardview"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/riir_karkun_name"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="Name of Karkun"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_name"
+        app:layout_constraintTop_toTopOf="@+id/riir_name" />
+
+    <TextView
+        android:id="@+id/riir_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="19dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="16dp"
+        android:text="ID: "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/riir_karkun_cardview"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/riir_Karkun_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="19dp"
+        android:layout_marginEnd="299dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginRight="299dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="16dp"
+        android:text="Id"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_id"
+        app:layout_constraintTop_toBottomOf="@+id/riir_karkun_cardview"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/riir_department"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="181dp"
+        android:layout_marginRight="181dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="8dp"
+        android:text="Department: "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_karkun_cardview"
+        app:layout_constraintTop_toBottomOf="@+id/riir_name" />
+
+    <TextView
+        android:id="@+id/riir_Karkun_department"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="Department of Karkun"
+        app:layout_constraintBottom_toBottomOf="@+id/riir_department"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_department"
+        app:layout_constraintTop_toTopOf="@+id/riir_department"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/riir_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="29dp"
+        android:layout_marginEnd="181dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginRight="181dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="8dp"
+        android:text="Address: "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_karkun_cardview"
+        app:layout_constraintTop_toBottomOf="@+id/riir_phone_number"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/riir_Karkun_address"
+        android:layout_width="154dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="16dp"
+        android:text="Adddress of Karkun"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_address"
+        app:layout_constraintTop_toTopOf="@+id/riir_address"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/riir_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="181dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginRight="181dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="8dp"
+        android:text="Phone#:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_karkun_cardview"
+        app:layout_constraintTop_toBottomOf="@+id/riir_age" />
+
+    <TextView
+        android:id="@+id/riir_Karkun_phonenumber"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="16dp"
+        android:text="PhoneNumber of Karkun"
+        app:layout_constraintBottom_toBottomOf="@+id/riir_phone_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_phone_number"
+        app:layout_constraintTop_toTopOf="@+id/riir_phone_number"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/riir_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="181dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginRight="181dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginTop="8dp"
+        android:text="Age: "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_karkun_cardview"
+        app:layout_constraintTop_toBottomOf="@+id/riir_department" />
+
+    <TextView
+        android:id="@+id/riir_karkun_age"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="16dp"
+        android:text="Age of Karkun"
+        app:layout_constraintBottom_toBottomOf="@+id/riir_age"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/riir_age"
+        app:layout_constraintTop_toTopOf="@+id/riir_age"
+        app:layout_constraintVertical_bias="0.0" />
+</android.support.constraint.ConstraintLayout>
