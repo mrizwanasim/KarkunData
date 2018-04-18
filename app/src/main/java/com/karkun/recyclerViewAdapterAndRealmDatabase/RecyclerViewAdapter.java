@@ -209,6 +209,4 @@ public class RecyclerViewAdapter extends MyRecyclerView.Adapter<RecyclerViewAdap
 
     }
 
-
-
 }

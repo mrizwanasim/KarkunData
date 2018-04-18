@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/asi_editText_age"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Age"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/asi_txt_age"
+            app:layout_constraintEnd_toEndOf="@+id/asi_editText_department"
+            app:layout_constraintStart_toStartOf="@+id/asi_editText_department" />
+
+        <EditText
+            android:id="@+id/asi_editText_address"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="8dp"
+            android:hint="Address"
+            android:inputType="textMultiLine"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toTopOf="@+id/button4"
+            app:layout_constraintEnd_toEndOf="@+id/asi_editText_phonenumber"
+            app:layout_constraintStart_toStartOf="@+id/asi_editText_phonenumber"
+            app:layout_constraintTop_toBottomOf="@+id/asi_editText_phonenumber" />
+
+        <EditText
+            android:id="@+id/asi_editText_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/asi_txt_name"
+            app:layout_constraintEnd_toEndOf="@+id/asi_editText_age"
+            app:layout_constraintStart_toStartOf="@+id/asi_editText_age" />
+
+        <EditText
+            android:id="@+id/asi_editText_phonenumber"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="66dp"
+            android:layout_marginLeft="66dp"
+            android:layout_marginRight="66dp"
+            android:layout_marginStart="66dp"
+            android:layout_marginTop="11dp"
+            android:hint="PhoneNumber"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/asi_txt_phone"
+            app:layout_constraintTop_toBottomOf="@+id/asi_editText_department" />
+
+        <EditText
+            android:id="@+id/asi_editText_department"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Department"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/asi_txt_department"
+            app:layout_constraintEnd_toEndOf="@+id/asi_editText_phonenumber"
+            app:layout_constraintStart_toStartOf="@+id/asi_editText_phonenumber" />
+
+        <ImageView
+            android:id="@+id/asi_image_view"
+            android:layout_width="150dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="22dp"
+            android:layout_marginTop="27dp"
+            android:src="@drawable/application_icon"
+            app:layout_constraintBottom_toTopOf="@+id/asi_editText_id"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/asi_btn_cancel" />
+
+        <TextView
+            android:id="@+id/asi_txt_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17dp"
+            android:text="Name:"
+            app:layout_constraintBottom_toTopOf="@+id/asi_editText_age"
+            app:layout_constraintEnd_toStartOf="@+id/guideline" />
+
+        <TextView
+            android:id="@+id/asi_txt_department"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="210dp"
+            android:text="Department:"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline" />
+
+        <TextView
+            android:id="@+id/asi_txt_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:text="Age:"
+            app:layout_constraintBottom_toTopOf="@+id/asi_editText_department"
+            app:layout_constraintEnd_toStartOf="@+id/guideline" />
+
+        <TextView
+            android:id="@+id/asi_txt_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Phone#:"
+            app:layout_constraintBottom_toBottomOf="@+id/asi_editText_phonenumber"
+            app:layout_constraintEnd_toStartOf="@+id/guideline" />
+
+        <TextView
+            android:id="@+id/asi_txt_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address:"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/asi_editText_address" />
+
+        <TextView
+            android:id="@+id/asi_txt_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:text="ID:"
+            app:layout_constraintBaseline_toBaselineOf="@+id/asi_editText_id"
+            app:layout_constraintEnd_toStartOf="@+id/asi_editText_id" />
+
+        <TextView
+            android:id="@+id/asi_editText_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="13dp"
+            android:hint="Id"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toTopOf="@+id/asi_editText_name"
+            app:layout_constraintEnd_toEndOf="@+id/asi_editText_name"
+            app:layout_constraintStart_toStartOf="@+id/asi_editText_name" />
+
+        <Button
+            android:id="@+id/asi_btn_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/btn_color"
+            android:text="Change"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="80dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="565dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@drawable/btn_color"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintEnd_toStartOf="@+id/asi_btn_change" />
+
+        <TextView
+            android:id="@+id/asi_btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:text="Edit Data!"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

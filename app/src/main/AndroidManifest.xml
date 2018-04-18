@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".activities.ActivityMain"/>
         <activity android:name=".activities.ActivityAdd"/>
+        <activity android:name=".activities.ActivityShowItem"/>
     </application>
 
 </manifest>

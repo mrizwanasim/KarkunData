@@ -1,18 +1,10 @@
 package com.karkun.activities;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Environment;
-import android.os.SystemClock;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,26 +16,28 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.karkun.R;
+import com.karkun.parts.CopyFile;
+import com.karkun.parts.GetPermissions;
 import com.karkun.recyclerViewAdapterAndRealmDatabase.KarkunData;
 import com.karkun.recyclerViewAdapterAndRealmDatabase.MyRecyclerView;
 import com.karkun.recyclerViewAdapterAndRealmDatabase.RecyclerViewAdapter;
 import com.karkun.recyclerViewAdapterAndRealmDatabase.SimpleTouchCallback;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
+
+import javax.security.auth.login.LoginException;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -70,6 +64,8 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
     private RealmResults<KarkunData> karkunResults;
     private Button el_add_button;
     private View mEmptyView;
+    private GetPermissions getPermissions;
+    private CopyFile copyFile;
 
     @Override
     protected void onStart() {
@@ -94,7 +90,9 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MyAppPermissions();
+        getPermissions = new GetPermissions(this);
+        getPermissions.myAppPermissions();
+
 
         mImageView = (ImageView) findViewById(R.id.mbackground);
         mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -107,7 +105,11 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
         mRecyclerView = (MyRecyclerView) findViewById(R.id.mRecyclerView);
         mRecyclerView.hideIfEmpty(mToolbar);
         mRecyclerView.showIfEmpty(mEmptyView);
+
+
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -118,14 +120,25 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
         el_add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ActivityAdd.class);
-                startActivity(intent);
+                getPermissions.myAppPermissions();
+                if (getPermissions.checkPermission()) {
+
+                    File newFile = new File(Environment.getExternalStorageDirectory().toString() + "/karkunAppData");
+                    if (!newFile.exists()) {
+                        newFile.mkdir();
+                    }
+
+                    Toast.makeText(getApplicationContext(), "Good", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), ActivityAdd.class);
+                    startActivity(intent);
+                }
             }
         });
 
         SimpleTouchCallback callback = new SimpleTouchCallback(mAdapter);
         ItemTouchHelper helper = new ItemTouchHelper(callback);
         helper.attachToRecyclerView(mRecyclerView);
+
     }
 
 
@@ -184,7 +197,7 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
                 Toast.makeText(this, "Descending Order", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.toolbar_backingUp:
-                MyAppPermissions();
+                getPermissions.myAppPermissions();
                 pathBackup = new File(realmObjcet.getPath());
                 Log.i(TAG, "PathBackup: " + pathBackup);
                 File newFile = new File(Environment.getExternalStorageDirectory().toString() + "/karkunAppData/BackupAndRestore/" + "karkunData.realm");
@@ -193,13 +206,14 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
                 }
                 Log.i(TAG, "newFile: " + newFile);
                 try {
-                    copyFile(pathBackup, newFile);
+                    copyFile = new CopyFile(this, pathBackup, newFile);
+
                 } catch (Exception e) {
                 }
                 Toast.makeText(this, "Backing up........", Toast.LENGTH_LONG).show();
                 break;
             case R.id.toolbar_backupRestore:
-                MyAppPermissions();
+                getPermissions.myAppPermissions();
                 pathBackup = new File(realmObjcet.getPath());
                 Log.i(TAG, "PathBackup: " + pathBackup);
                 File newFile2 = new File(Environment.getExternalStorageDirectory().toString() + "/karkunAppData/BackupAndRestore/" + "karkunData.realm");
@@ -208,7 +222,7 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
                 }
                 Log.i(TAG, "newFile: " + newFile2);
                 try {
-                    copyFile(newFile2, pathBackup);
+                    copyFile = new CopyFile(this, newFile2, pathBackup);
                 } catch (Exception e) {
                 }
                 AlertDialog alertDialog = new AlertDialog.Builder(ActivityMain.this).create();
@@ -237,158 +251,28 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
         return super.onOptionsItemSelected(item);
     }
 
-//||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-    public static void copyFile(File sourceFile, File destFile) throws IOException {
-        if (!destFile.getParentFile().exists())
-            destFile.getParentFile().mkdirs();
-        if (!destFile.exists()) {
-            destFile.createNewFile();
-        }
-        FileChannel source = null;
-        FileChannel destination = null;
-        try {
-            source = new FileInputStream(sourceFile).getChannel();
-            destination = new FileOutputStream(destFile).getChannel();
-            destination.transferFrom(source, 0, source.size());
-        } finally {
-            if (source != null) {
-                source.close();
-            }
-            if (destination != null) {
-                destination.close();
-            }
-        }
+    @Override
+    public void onItemSelected(KarkunData karkunData) {
+        long id;
+        id = karkunData.getId();
+        Intent intent = new Intent(this, ActivityShowItem.class);
+        intent.putExtra("id",Long.toString(id));
+        intent.putExtra("name", karkunData.getName());
+        intent.putExtra("department", karkunData.getDepartment());
+        intent.putExtra("age", karkunData.getAge());
+        intent.putExtra("phone", karkunData.getPhoneNumber());
+        intent.putExtra("address", karkunData.getAddress());
+
+        intent.putExtra("picture", karkunData.getPictures());
+
+        startActivity(intent);
+
     }
-
-    //||||||||||||||||||||||||||||||||||||||||||||||||||GETTING PERMISSIONS||||||||||||||||||||||||||||||||||||||||||||||||
-    private void MyAppPermissions() {
-        permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
-        if (ActivityCompat.checkSelfPermission(ActivityMain.this, permissionsRequired[0]) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(ActivityMain.this, permissionsRequired[1]) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, permissionsRequired[0])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, permissionsRequired[1])) {
-                //Show Information about why you need the permission
-                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMain.this);
-                builder.setTitle("Need Multiple Permissions");
-                builder.setMessage("This app needs Write and Read External Storage.");
-                builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        ActivityCompat.requestPermissions(ActivityMain.this, permissionsRequired, PERMISSION_CALLBACK_CONSTANT);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
-            } else if (permissionStatus.getBoolean(permissionsRequired[0], false)) {
-                //Previously Permission Request was cancelled with 'Dont Ask Again',
-                // Redirect to Settings after showing Information about why you need the permission
-                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMain.this);
-                builder.setTitle("Need Multiple Permissions");
-                builder.setMessage("This app needs Write and Read External Storage.");
-                builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        sentToSettings = true;
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                        intent.setData(uri);
-                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                        Toast.makeText(getBaseContext(), "Go to Permissions to Grant Write and Read External Storage", Toast.LENGTH_LONG).show();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
-            } else {
-                //just request the permission
-                ActivityCompat.requestPermissions(ActivityMain.this, permissionsRequired, PERMISSION_CALLBACK_CONSTANT);
-            }
-            SharedPreferences.Editor editor = permissionStatus.edit();
-            editor.putBoolean(permissionsRequired[0], true);
-            editor.commit();
-        } else {
-            //You already have the permission, just go ahead.
-            proceedAfterPermission();
-        }
-    }
-
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
         mAdapter.update(karkunResults);
-        if (sentToSettings) {
-            if (ActivityCompat.checkSelfPermission(ActivityMain.this, permissionsRequired[0]) == PackageManager.PERMISSION_GRANTED) {
-                //Got Permission
-                proceedAfterPermission();
-            }
-        }
     }
-
-    private void proceedAfterPermission() {
-        Toast toast = Toast.makeText(getBaseContext(), "We got All Permissions", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.TOP | Gravity.CENTER, 0, 0);
-        toast.show();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PERMISSION_CALLBACK_CONSTANT) {
-            //check if all permissions are granted
-            boolean allgranted = false;
-            for (int i = 0; i < grantResults.length; i++) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    allgranted = true;
-                } else {
-                    allgranted = false;
-                    break;
-                }
-            }
-            if (allgranted) {
-                proceedAfterPermission();
-            } else if (ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, permissionsRequired[0])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(ActivityMain.this, permissionsRequired[1])) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityMain.this);
-                builder.setTitle("Need Multiple Permissions");
-                builder.setMessage("This app needs Write and Read External Storage.");
-                builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        ActivityCompat.requestPermissions(ActivityMain.this, permissionsRequired, PERMISSION_CALLBACK_CONSTANT);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
-            } else {
-                Toast.makeText(getBaseContext(), "Unable to get Permission", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    @Override
-    public void onItemSelected(KarkunData karkunData) {
-        Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show();
-    }
-//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 }
