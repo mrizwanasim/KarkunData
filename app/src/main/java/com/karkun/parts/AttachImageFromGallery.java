@@ -69,7 +69,8 @@ public class AttachImageFromGallery extends AppCompatActivity {
         mySDcardFilePath = destFile.toString();
         Log.i("Testing", "CopyFileFromSourseToDestination: " + mySDcardFilePath);
         try {
-            copyFile = new CopyFile(this,new File(getPathFromURI(data.getData())), destFile);
+            copyFile = new CopyFile(this);
+            copyFile.copyFile(new File(getPathFromURI(data.getData())), destFile);
         } catch (Exception e) {
             e.printStackTrace();
             Log.i("Testing", "onActivityResult: " + e);

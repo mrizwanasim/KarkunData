@@ -11,27 +11,20 @@ import java.nio.channels.FileChannel;
 
 public class CopyFile {
 
-    public CopyFile(Context context, File fromSource, File toDestination) {
-        try {
-            copyFile(fromSource, toDestination);
-
-
-        }catch (Exception e){
-            Toast.makeText(context, "File Coping Error", Toast.LENGTH_SHORT).show();
-        }
+    public CopyFile(Context context) {
     }
 
-    private void copyFile(File sourceFile, File destFile) throws IOException {
+    public void copyFile(File sourceFile, File destFile) throws IOException {
         if (!destFile.getParentFile().exists())
             destFile.getParentFile().mkdirs();
 
         if (!destFile.exists()) {
             destFile.createNewFile();
         }
-
-        if (!sourceFile.exists()) {
-            return;
-        }
+//
+//        if (!sourceFile.exists()) {
+//            return;
+//        }
 
         FileChannel source = null;
         FileChannel destination = null;
