@@ -24,6 +24,7 @@ public class AttachImageFromGallery extends AppCompatActivity {
     public UniqueDateAndTimePicker uniqueDateAndTimePicker;
     private static final int SELECT_PICTURE = 100;
     public String mySDcardFilePath;
+    int imagePath;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +33,8 @@ public class AttachImageFromGallery extends AppCompatActivity {
     }
 
     /* Choose an image from Gallery */
-    public void openImageChooser() {
+    public void openImageChooser(int imagePath) {
+        this.imagePath = imagePath;
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -50,12 +52,13 @@ public class AttachImageFromGallery extends AppCompatActivity {
 
                     String path = getPathFromURI(selectedImageUri);
                     Log.i("Testing", "Image Path : " + path);
+
                     // Set the image in ImageView
                     Glide
                             .with(getBaseContext())
                             .load(selectedImageUri)
                             .apply(RequestOptions.circleCropTransform())
-                            .into((ImageView) findViewById(R.id.aa_image_view));
+                            .into((ImageView) findViewById(imagePath));
 //                    ((ImageView) findViewById(R.id.aa_image_view)).setImageURI(selectedImageUri);
                     CopyFileFromSourseToDestination(data);
                 }

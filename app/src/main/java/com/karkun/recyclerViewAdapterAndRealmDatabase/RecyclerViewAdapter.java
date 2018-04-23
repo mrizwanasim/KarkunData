@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,7 +36,8 @@ public class RecyclerViewAdapter extends MyRecyclerView.Adapter<RecyclerViewAdap
     private Realm mRealm;
     private RealmResults<KarkunData> mResults;
     private RealmResults<KarkunData> mResultsCopy;
-    private RecyclerViewItemSelectInterface listener;
+    private RecyclerViewItemSelectInterface recyclerViewItemSelectInterfaceListener;
+    private EditViewSelectInterface editViewSelectInterfaceListener;
     Context context;
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -59,11 +61,12 @@ public class RecyclerViewAdapter extends MyRecyclerView.Adapter<RecyclerViewAdap
         }
     };
 
-    public RecyclerViewAdapter(RealmResults<KarkunData> constractorResults, Context context, Realm realm, RecyclerViewItemSelectInterface listener) {
+    public RecyclerViewAdapter(RealmResults<KarkunData> constractorResults, Context context, Realm realm, RecyclerViewItemSelectInterface recyclerViewItemSelectInterface, EditViewSelectInterface editViewSelectInterface) {
         mRealm = realm;
         update(constractorResults);
         this.context = context;
-        this.listener = listener;
+        recyclerViewItemSelectInterfaceListener = recyclerViewItemSelectInterface;
+        editViewSelectInterfaceListener = editViewSelectInterface;
     }
 
 
@@ -129,6 +132,7 @@ public class RecyclerViewAdapter extends MyRecyclerView.Adapter<RecyclerViewAdap
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView id, name, age, address, department, phoneNumber;
         private ImageView pictures;
+        private Button riir_btn_edit;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -140,11 +144,19 @@ public class RecyclerViewAdapter extends MyRecyclerView.Adapter<RecyclerViewAdap
             phoneNumber = (TextView) itemView.findViewById(R.id.riir_Karkun_phonenumber);
             pictures = (ImageView) itemView.findViewById(R.id.riir_karkun_image);
             pictures.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            riir_btn_edit = itemView.findViewById(R.id.riir_btn_edit);
+
+            riir_btn_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editViewSelectInterfaceListener.onButtonSelected(mResults.get(getAdapterPosition()));
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemSelected(mResults.get(getAdapterPosition()));
+                    recyclerViewItemSelectInterfaceListener.onItemSelected(mResults.get(getAdapterPosition()));
                 }
             });
         }
@@ -207,6 +219,10 @@ public class RecyclerViewAdapter extends MyRecyclerView.Adapter<RecyclerViewAdap
     public interface RecyclerViewItemSelectInterface{
         void onItemSelected(KarkunData karkunData);
 
+    }
+
+    public interface EditViewSelectInterface{
+        void onButtonSelected(KarkunData karkunData);
     }
 
 }

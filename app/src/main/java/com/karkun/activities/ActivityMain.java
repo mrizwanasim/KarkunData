@@ -1,9 +1,7 @@
 package com.karkun.activities;
 
-import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -33,19 +30,16 @@ import com.karkun.recyclerViewAdapterAndRealmDatabase.MyRecyclerView;
 import com.karkun.recyclerViewAdapterAndRealmDatabase.RecyclerViewAdapter;
 import com.karkun.recyclerViewAdapterAndRealmDatabase.SimpleTouchCallback;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.IOException;
-
-import javax.security.auth.login.LoginException;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapter.RecyclerViewItemSelectInterface {
+public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapter.RecyclerViewItemSelectInterface,
+        RecyclerViewAdapter.EditViewSelectInterface{
 
     private static final String TAG = "Testing";
 
@@ -61,6 +55,7 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
     private GetPermissions getPermissions;
     private CopyFile copyFile;
     AlertDialog alertDialog;
+    public KarkunData karkunDataListener;
 
 
     @Override
@@ -108,7 +103,7 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         realmObjcet = Realm.getDefaultInstance();
         karkunResults = realmObjcet.where(KarkunData.class).sort("date", Sort.ASCENDING).findAllAsync();
-        mAdapter = new RecyclerViewAdapter(karkunResults, this, realmObjcet, this);
+        mAdapter = new RecyclerViewAdapter(karkunResults, this, realmObjcet, this, this);
         mRecyclerView.setAdapter(mAdapter);
         el_btn_restore.setOnClickListener(onClickListener);
         el_add_button.setOnClickListener(onClickListener);
@@ -139,36 +134,38 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
 
                 case R.id.el_btn_restore:
                     getPermissions.myAppPermissions();
-                    pathBackup = new File(realmObjcet.getPath());
-                    Log.i(TAG, "PathBackup: " + pathBackup);
-                    File newFile2 = new File(Environment.getExternalStorageDirectory().toString() + "/karkunAppData/BackupAndRestore/" + "karkunData.realm");
-                    Log.i(TAG, "newFile: " + newFile2);
-                    try {
-                        copyFile = new CopyFile(ActivityMain.this);
-                        copyFile.copyFile(newFile2, pathBackup);
-                        alertDialog = new AlertDialog.Builder(ActivityMain.this).create();
-                        alertDialog.setTitle("RESTART!");
-                        alertDialog.setMessage("Please, Atart App Manually, Thanks");
-                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        System.exit(0);
-                                    }
-                                });
-                    } catch (IOException e) {
-                        alertDialog = new AlertDialog.Builder(ActivityMain.this).create();
-                        alertDialog.setTitle("BACKUP PROBLEM!");
-                        alertDialog.setMessage("BACKUP FILE NOT EXIST");
-                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                    }
+                    if(getPermissions.checkPermission()) {
+                        pathBackup = new File(realmObjcet.getPath());
+                        Log.i(TAG, "PathBackup: " + pathBackup);
+                        File newFile2 = new File(Environment.getExternalStorageDirectory().toString() + "/karkunAppData/BackupAndRestore/" + "karkunData.realm");
+                        Log.i(TAG, "newFile: " + newFile2);
+                        try {
+                            copyFile = new CopyFile(ActivityMain.this);
+                            copyFile.copyFile(newFile2, pathBackup);
+                            alertDialog = new AlertDialog.Builder(ActivityMain.this).create();
+                            alertDialog.setTitle("RESTART!");
+                            alertDialog.setMessage("Please, Start App Manually, Thanks");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            System.exit(0);
+                                        }
+                                    });
+                        } catch (IOException e) {
+                            alertDialog = new AlertDialog.Builder(ActivityMain.this).create();
+                            alertDialog.setTitle("BACKUP PROBLEM!");
+                            alertDialog.setMessage("BACKUP FILE NOT EXIST");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                        }
 
-                    alertDialog.show();
+                        alertDialog.show();
+                    }
                     break;
             }
         }
@@ -215,7 +212,7 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
             case R.id.ascending_order:
                 realmObjcet = Realm.getDefaultInstance();
                 karkunResults = realmObjcet.where(KarkunData.class).sort("name", Sort.ASCENDING).findAllAsync();
-                mAdapter = new RecyclerViewAdapter(karkunResults, this, realmObjcet, this);
+                mAdapter = new RecyclerViewAdapter(karkunResults, this, realmObjcet, this, this);
                 mRecyclerView.setAdapter(mAdapter);
                 karkunResults.addChangeListener(myChangeListener);
                 Toast.makeText(this, "Ascending Order", Toast.LENGTH_SHORT).show();
@@ -223,7 +220,7 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
             case R.id.descending_order:
                 realmObjcet = Realm.getDefaultInstance();
                 karkunResults = realmObjcet.where(KarkunData.class).sort("name", Sort.DESCENDING).findAllAsync();
-                mAdapter = new RecyclerViewAdapter(karkunResults, this, realmObjcet, this);
+                mAdapter = new RecyclerViewAdapter(karkunResults, this, realmObjcet, this, this);
                 mRecyclerView.setAdapter(mAdapter);
                 karkunResults.addChangeListener(myChangeListener);
                 Toast.makeText(this, "Descending Order", Toast.LENGTH_SHORT).show();
@@ -258,7 +255,7 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
                     copyFile.copyFile(newFile2, pathBackup);
                     alertDialog = new AlertDialog.Builder(ActivityMain.this).create();
                     alertDialog.setTitle("RESTART!");
-                    alertDialog.setMessage("Please, Atart App Manually, Thanks");
+                    alertDialog.setMessage("Please, Start App Manually, Thanks");
                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -306,16 +303,50 @@ public class ActivityMain extends AppCompatActivity implements RecyclerViewAdapt
         intent.putExtra("age", karkunData.getAge());
         intent.putExtra("phone", karkunData.getPhoneNumber());
         intent.putExtra("address", karkunData.getAddress());
-
         intent.putExtra("picture", karkunData.getPictures());
-
         startActivity(intent);
-
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
         mAdapter.update(karkunResults);
+    }
+
+    @Override
+    public void onButtonSelected(KarkunData karkunData) {
+        karkunDataListener = karkunData;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure to edit this entery?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
+
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    startEditActivity();
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    dialogInterface.dismiss();
+                    break;
+            }
+        }
+    };
+
+    public void startEditActivity(){
+        long id;
+        id = karkunDataListener.getId();
+        Intent intent = new Intent(this, ActivityEditItem.class);
+        intent.putExtra("id", Long.toString(id));
+        intent.putExtra("name", karkunDataListener.getName());
+        intent.putExtra("department", karkunDataListener.getDepartment());
+        intent.putExtra("age", karkunDataListener.getAge());
+        intent.putExtra("phone", karkunDataListener.getPhoneNumber());
+        intent.putExtra("address", karkunDataListener.getAddress());
+        intent.putExtra("picture", karkunDataListener.getPictures());
+        startActivity(intent);
     }
 }

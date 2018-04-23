@@ -48,7 +48,6 @@ public class ActivityAdd extends AttachImageFromGallery {
     private EditText id, name, age, address, department, phone;
     private long date;
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +61,6 @@ public class ActivityAdd extends AttachImageFromGallery {
         address = (EditText) findViewById(R.id.aa_address);
         department = (EditText) findViewById(R.id.aa_department);
         phone = (EditText) findViewById(R.id.aa_phone);
-
 
         aImageButton.setOnClickListener(pressingOnClickListener);
         addImageButton.setOnClickListener(pressingOnClickListener);
@@ -119,7 +117,7 @@ public class ActivityAdd extends AttachImageFromGallery {
                 }
 
                 case R.id.aa_add_image_btn: {
-                    openImageChooser();
+                    openImageChooser(R.id.aa_image_view);
                     break;
                 }
             }
